@@ -1,0 +1,16 @@
+<!--<div>-->
+<!--    header-->
+<!--    @!yield($slot.main)-->
+<!--</div>-->
+
+<tr>
+    <td class="header">
+        <a href="{{ url }}" style="display: inline-block;">
+            @if($slot.main === 'Laravel')
+            <img src="https://phantrungnguyen.com/63026323.png" class="logo" alt="Laravel Logo">
+            @else
+                @!yield($slot.main)
+            @endif
+        </a>
+    </td>
+</tr>

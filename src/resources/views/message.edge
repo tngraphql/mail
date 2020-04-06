@@ -1,0 +1,27 @@
+@component('layout')
+<!--Header-->
+@slot('header')
+    @component('header', url='https://phantrungnguyen.com')
+Laravel
+    @endcomponent
+@endslot
+
+<!--Body-->
+@!yield($slot.main)
+
+
+<!--subcopy-->
+@slot('subcopy')
+    @component('subcopy')
+        @!yield($slot.subcopy)
+    @endcomponent
+@endslot
+
+<!--Footer-->
+@slot('footer')
+@component('footer')
+© 2020 {{ config('app.name') }}. All rights reserved.
+@endcomponent
+@endslot
+
+@endcomponent

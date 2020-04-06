@@ -1,0 +1,22 @@
+@component('message')
+
+<!--{{ introLines }}-->
+<h1>Hello!</h1>
+
+@each(line in introLines)
+{{ line }}
+@endeach
+
+@component('button', url='https://phantrungnguyen.com')
+click ngay
+@endcomponent
+
+@each(line in outroLines)
+{{ line }}
+@endeach
+
+@slot('subcopy')
+Phan Trung Nguyên
+@endslot
+
+@endcomponent
