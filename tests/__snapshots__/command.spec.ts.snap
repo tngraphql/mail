@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`command make command should work properly 1`] = `
+"/**
+ * (c) Phan Trung Nguyên <nguyenpl117@gmail.com>
+ * User: nguyenpl117
+ * Date: 4/6/2020
+ * Time: 7:38 PM
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+import { Mailable } from '@tngraphql/mail';
+
+export class OrderCreate extends Mailable {
+
+    /**
+     * Create a new message instance.
+     */
+    public constructor() {
+        super();
+    }
+
+    /**
+     * Build the message.
+     */
+    public build(): void {
+        //
+    }
+}
+"
+`;
