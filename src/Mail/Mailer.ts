@@ -12,13 +12,14 @@ import { MailableContract } from '../Contract/MailableContract';
 import { event } from '@tngraphql/illuminate/dist/Support/helpers';
 import { MessageSending } from '../Events/MessageSending';
 import { MessageSent } from '../Events/MessageSent';
+import { MailerContract } from '../Contract/MailerContract';
 
 type AddressContact = {
     address?: string;
     name?: string;
 }
 
-export class Mailer {
+export class Mailer implements MailerContract {
     protected _from: AddressContact = {};
     protected _to: AddressContact = {};
     protected _returnPath: AddressContact = {};
@@ -121,7 +122,7 @@ export class Mailer {
         return message;
     }
 
-    async send<T = any>(view: MailableContract | ((message: Message) => any)): Promise<T> {
+    public async send<T = any>(view: MailableContract | ((message: Message) => any)): Promise<T> {
         if ( view instanceof Mailable ) {
             return view.send(this);
         }
@@ -182,5 +183,9 @@ export class Mailer {
         message.to(this._to.address, this._to.name, true);
         message.cc(null, null, true);
         message.bcc(null, null, true);
+    }
+
+    public close() {
+        return this.transport.close();
     }
 }

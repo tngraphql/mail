@@ -15,10 +15,13 @@ import { SmtpTransport } from '../src/Transport/SmtpTransport';
 import { SesTransport } from '../src/Transport/SesTransport';
 import { Mailable } from '../src/Mail/Mailable';
 import { PendingMail } from '../src/Mail/PendingMail';
+import { EtherealTransport } from '../src/Transport/EtherealTransport';
+import { MemoryTransport } from '../src/Transport/MemoryTransport';
+import { MailgunTransport } from '../src/Transport/MailgunTransport';
 
 describe('mail-manager', () => {
     let app: Application;
-    let mail: MailManager;
+    let mail: MailManager|any;
     beforeAll(async () => {
         app = new Application(__dirname);
         await (new LoadConfiguration()).bootstrap(app);
@@ -248,5 +251,47 @@ describe('mail-manager', () => {
         expect(mailer1.$to).toEqual({ name: 'asfsf', email: 'abc@gmail.com' });
         expect(mailer2.$bcc).toEqual({ name: 'asfsf', email: 'abc@gmail.com' });
         expect(mailer3.$cc).toEqual({ name: 'asfsf', email: 'abc@gmail.com' });
+    });
+
+    it('should create ethereal transport instance', async () => {
+        expect(mail.createEtherealTransport({})).toBeInstanceOf(EtherealTransport);
+    });
+
+    it('should create memory transport instace', async () => {
+        expect(mail.createMemoryTransport({})).toBeInstanceOf(MemoryTransport);
+    });
+
+    it('should create mailgun transport instance', async () => {
+        expect(mail.createMailgunTransport({auth: {api_key: '123123'}})).toBeInstanceOf(MailgunTransport);
+    });
+
+    it('Closes a the mapping instance and removes it from the cache', async () => {
+        await mail.mailer();
+        expect(mail._mailers['smtp']).toBeInstanceOf(Mailer);
+        await mail.close('smtp');
+        expect(mail._mailers['smtp']).toBeUndefined();
+    });
+
+    it('Closes default the mapping instance and removes it from the cache', async () => {
+        await mail.mailer();
+        expect(mail._mailers['smtp']).toBeInstanceOf(Mailer);
+        await mail.close();
+        expect(mail._mailers['smtp']).toBeUndefined();
+    });
+
+    it('should remove cache mailer', async () => {
+        await mail.mailer();
+        expect(mail._mailers['smtp']).toBeInstanceOf(Mailer);
+        await mail.release('smtp');
+        expect(mail._mailers['smtp']).toBeUndefined();
+    });
+
+    it('Closes all the mapping instance and removes it from the cache', async () => {
+        await mail.mailer();
+        await mail.mailer('custom1');
+        await mail.mailer('custom2');
+        expect(Object.keys(mail._mailers).length).toBe(3);
+        await mail.closeAll();
+        expect(Object.keys(mail._mailers).length).toBe(0);
     });
 })

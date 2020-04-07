@@ -287,4 +287,28 @@ describe('message', () => {
             text: 'hello'
         })
     });
+
+    it('should assert valid address', async () => {
+        const message = new Message();
+        expect(() => message.to('name')).toThrow('Address in mailbox given [name] does not comply with RFC 2822.');
+        expect(() => message.to(undefined, 'name')).toThrow('Address in mailbox given [undefined] does not comply with RFC 2822.')
+    });
+
+    it('should get to address', async () => {
+        const message = new Message();
+        message.to('user@gmail.com');
+        expect(message.getTo()).toEqual([{ address: 'user@gmail.com' }]);
+    });
+
+    it('should get from address', async () => {
+        const message = new Message();
+        message.from('user@gmail.com');
+        expect(message.getFrom()).toEqual({ address: 'user@gmail.com' });
+    });
+
+    it('sould get subject', async () => {
+        const message = new Message();
+        message.subject('send message');
+        expect(message.getSubject()).toBe('send message');
+    });
 })

@@ -38,6 +38,7 @@ describe('command', () => {
 
         const schemaTemplate = await fs.get((makeCommand as any).getStub());
         const file = await fs.get(join(makeCommand.getDestinationPath(), 'OrderCreate.ts'));
+        expect((makeCommand as any).getSuffix()).toBe('');
 
         expect(toNewlineArray(file)).toEqual(toNewlineArray(
             schemaTemplate

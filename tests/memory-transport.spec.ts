@@ -17,7 +17,7 @@ import { Mailable } from '../src/Mail/Mailable';
 
 describe('memory-transport', () => {
 
-    it('newup smtp driver', async () => {
+    it('new setup driver', async () => {
         const mem: any = new MemoryTransport({});
         expect(mem).toBeInstanceOf(MemoryTransport);
         expect(mem.transporter).toBeDefined();
@@ -69,5 +69,17 @@ describe('memory-transport', () => {
         expect(messages[0].message.nodeMailerMessage.from.address).toBe('sender@example.com');
         expect(messages[0].message.nodeMailerMessage.to[0].address).toEqual('recipient@example.com');
         expect(messages[0].message.nodeMailerMessage.subject).toBe('Simple email');
+    });
+
+    it('should throw error when transport is closed', async () => {
+        const mem: MemoryTransport|any = new MemoryTransport({});
+        await mem.close();
+
+        try {
+            await mem.send(undefined)
+        } catch (e) {
+            expect(e.message).toBe('Driver transport has been closed and cannot be used for sending emails');
+        }
+
     });
 })

@@ -1,13 +1,15 @@
 import { Readable } from 'stream'
 import { MessageContract } from '../Contract/MessageContract';
-import { AttachmentOptionsNode, EnvolpeNode, MessageNode, OneOrMany } from '../Contract/type';
-import _ = require('lodash');
+import { AttachmentOptionsNode, EnvolpeNode, MessageNode } from '../Contract/type';
+import { RfcComplianceException } from '../Exceptions/RfcComplianceException';
 
 /**
  * Fluent API to construct node mailer message object
  */
 export class Message implements MessageContract {
-    private nodeMailerMessage: MessageNode = {}
+    private nodeMailerMessage: MessageNode = {};
+    private emailValidator = require('email-validator');
+
     constructor() {
     }
 
@@ -25,7 +27,11 @@ export class Message implements MessageContract {
      * Returns address node with correctly formatted way
      */
     private getAddress(address: string, name?: string): { address: string, name?: string } {
-        return name ? { address, name } : { address };
+        const actualMailboxes = name ? { address, name } : { address };
+
+        this.assertValidAddress(actualMailboxes.address);
+
+        return actualMailboxes;
     }
 
     /**
@@ -332,5 +338,16 @@ export class Message implements MessageContract {
      */
     public toJSON(): MessageNode {
         return Object.assign(this.content, this.nodeMailerMessage)
+    }
+
+    /**
+     * Throws an Exception if the address passed does not comply with RFC 2822
+     *
+     * @param address
+     */
+    private assertValidAddress(address: string) {
+        if ( ! this.emailValidator.validate(address) ) {
+            throw new RfcComplianceException(`Address in mailbox given [${ address }] does not comply with RFC 2822.`);
+        }
     }
 }

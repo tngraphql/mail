@@ -11,19 +11,22 @@ import { MailManager } from '../src/Mail/MailManager';
 import { Application, LoadConfiguration } from '@tngraphql/illuminate';
 import { Mailable } from '../src/Mail/Mailable';
 import { config, createTestAccount } from './helpers';
+import { SmtpTransport } from '../src/Transport/SmtpTransport';
 
 const nodemailer = require('nodemailer');
 
 describe('smtp-transport', () => {
     let account;
+    let app;
+
     beforeAll(async () => {
         jest.setTimeout(20000);
         account = await createTestAccount();
+        app = new Application(__dirname);
+        await (new LoadConfiguration()).bootstrap(app);
     })
 
     it('send simple email', async () => {
-        const app = new Application(__dirname);
-        await (new LoadConfiguration()).bootstrap(app);
         app.config.set('mail', config(account, 'smtp'));
         const mail = new MailManager(app);
 
@@ -41,8 +44,6 @@ describe('smtp-transport', () => {
     });
 
     it('send plain mail', async () => {
-        const app = new Application(__dirname);
-        await (new LoadConfiguration()).bootstrap(app);
         app.config.set('mail', config(account, 'smtp'));
         const mail = new MailManager(app);
 
@@ -78,6 +79,16 @@ describe('smtp-transport', () => {
             await mail.send(new Simple());
         } catch (e) {
             expect(e.message).toBe('No recipients defined');
+        }
+    });
+
+    it('should throw error when transport is closed', async () => {
+        const smtp = new SmtpTransport({});
+        await smtp.close();
+        try {
+            await smtp.send('message');
+        }catch (e) {
+            expect(e.message).toBe('Driver transport has been closed and cannot be used for sending emails')
         }
     });
 })

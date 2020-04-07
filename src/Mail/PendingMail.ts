@@ -4,9 +4,8 @@
  * Date: 3/31/2020
  * Time: 2:38 PM
  */
-import {Mailer} from "./Mailer";
-import {MessageContract} from "../Contract/MessageContract";
 import { MailableContract } from '../Contract/MailableContract';
+import { MailerContract } from '../Contract/MailerContract';
 
 export class PendingMail {
     /**
@@ -30,7 +29,7 @@ export class PendingMail {
      */
     protected $bcc = [];
 
-    constructor(protected mailer: Mailer) {
+    constructor(protected mailer: MailerContract) {
     }
 
     public to(users): this {

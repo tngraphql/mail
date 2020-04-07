@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-import { Mailable } from '../src/Mail/Mailable';
+import { Mailable } from '../src';
 import { Readable } from 'stream';
 import * as path from 'path';
 import { join } from 'path';
@@ -252,6 +252,50 @@ describe('mailable', () => {
         ]);
     });
 
+    it('should set the recipients of the message.', async () => {
+        const mailable: any | Mailable = new Mailable();
+        mailable.nodeMailerMessage.to = [];
+        mailable.setAddress('user@gmail.com');
+        expect(mailable.nodeMailerMessage.to[0]).toEqual({
+            address: 'user@gmail.com',
+            name: null
+        });
+
+        mailable.nodeMailerMessage.to = [];
+        mailable.setAddress('user@gmail.com', 'user');
+        expect(mailable.nodeMailerMessage.to[0]).toEqual({
+            address: 'user@gmail.com',
+            name: 'user'
+        });
+        mailable.nodeMailerMessage.to = [];
+        mailable.setAddress({email: "user@gmail.com"});
+        expect(mailable.nodeMailerMessage.to[0]).toEqual({
+            address: 'user@gmail.com',
+            name: null
+        });
+
+        mailable.nodeMailerMessage.to = [];
+        mailable.setAddress({email: "user@gmail.com", name: 'user'});
+        expect(mailable.nodeMailerMessage.to[0]).toEqual({
+            address: 'user@gmail.com',
+            name: 'user'
+        });
+
+        mailable.nodeMailerMessage.to = [];
+        mailable.setAddress({ name: 'user'});
+
+        expect(mailable.nodeMailerMessage.to[0]).toEqual({
+            name: 'user'
+        });
+
+        mailable.nodeMailerMessage.to = [];
+        mailable.setAddress(undefined, 'user');
+
+        expect(mailable.nodeMailerMessage.to[0]).toEqual({
+            name: 'user'
+        });
+    });
+
     describe('render template', () => {
         const fs = new Filesystem(join(__dirname, 'app'));
 
@@ -292,7 +336,7 @@ describe('mailable', () => {
             mailable.htmlView('message', { user: 'nguyenpl' });
             mailable._view = app.use('view');
 
-            expect(mailable.content.html).toBe('<h1>hello nguyenpl</h1>\n')
+            expect(mailable.content.html).toBe('<h1>hello nguyenpl</h1>\n');
         });
 
         it('Compute apple watch html from defined view', async () => {
@@ -309,6 +353,5 @@ describe('mailable', () => {
 
             expect(mailable.content.watch).toBe('<h1>hello nguyenpl</h1>\n')
         });
-
     });
 })

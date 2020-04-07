@@ -12,9 +12,9 @@ import { Application, LoadConfiguration } from '@tngraphql/illuminate';
 import { MailManager } from '../src/Mail/MailManager';
 import { Mailer } from '../src/Mail/Mailer';
 import { Message } from '../src/Message';
-import { Mailable } from '../src/Mail/Mailable';
-import { MessageSending } from '../src/Events/MessageSending';
-import { MessageSent } from '../src/Events/MessageSent';
+import { Mailable } from '../src';
+import { MessageSending } from '../src/Events';
+import { MessageSent } from '../src/Events';
 import { Readable } from "stream";
 
 describe('mailer', () => {

@@ -221,4 +221,33 @@ export class MailManager extends Manager {
     public send(mailable: Mailable | any) {
         return this.mailer().send(mailable);
     }
+
+    /**
+     * Closes a the mapping instance and removes it from the cache
+     */
+    public async close (name?: string): Promise<void> {
+        name = name || this.getDefaultDriver();
+
+        const mailer = this.mailer(name);
+
+        await mailer.close();
+
+        this.release(name);
+    }
+
+    /**
+     * remove cache mailer
+     *
+     * @param name
+     */
+    public release(name: string) {
+        delete this._mailers[name];
+    }
+
+    /**
+     * Closes all the mapping instance and removes it from the cache
+     */
+    public async closeAll (): Promise<void> {
+        await Promise.all(Array.from<string>(Object.keys(this['_mailers'])).map((name: string) => this.close(name)))
+    }
 }

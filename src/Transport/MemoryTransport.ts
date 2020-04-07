@@ -45,18 +45,15 @@ export class MemoryTransport {
      *
      * @throws {Error} If promise rejects
      */
-    send(message) {
+    send<T = any>(message): Promise<T> {
+        if ( ! this.transporter ) {
+            throw new Error('Driver transport has been closed and cannot be used for sending emails')
+        }
+
         return new Promise((resolve, reject) => {
             this.transporter.sendMail(message, (error, result) => {
-                if ( error ) {
-                    reject(error)
-                } else {
-                    /**
-                     * Parsing and mutating the message to a JSON object
-                     */
-                    result.message = JSON.parse(result.message)
-                    resolve(result)
-                }
+                result.message = JSON.parse(result.message)
+                resolve(result);
             })
         })
     }
