@@ -10,9 +10,10 @@
   "scripts": {
     "test": "jest --verbose --coverage --runInBand",
     "dev": "ts-node-dev example/index.ts",
-    "clean": "del dist",
+    "clean": "rimraf dist",
     "build": "npm run clean && tsc -b && npm run copy:files",
-    "copy:files": "copyfiles -u 0 \"src/**/*.stub\" dist"
+    "copy:files": "copyfiles -u 0 \"src/**/*.stub\" \"src/**/*.edge\" dist"
+
   },
   "author": "Nguyenpl117,TNGraphQL",
   "license": "MIT",
@@ -47,10 +48,10 @@
     "ts-jest": "^25.2.1",
     "ts-node": "^8.4.1",
     "ts-node-dev": "^1.0.0-pre.44",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.2",
+    "edge.js": "1.1.4"
   },
   "dependencies": {
-    "edge.js": "1.1.4",
     "email-validator": "^2.0.4",
     "nodemailer": "^6.4.6"
   },

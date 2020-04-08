@@ -8,7 +8,8 @@
  * file that was distributed with this source code.
  */
 import { GeneratorCommand } from '@tngraphql/illuminate/dist/Foundation';
-import * as path from "path";
+import * as path from 'path';
+import { args, flags } from '@tngraphql/console';
 
 export class MailMakeCommand extends GeneratorCommand {
     protected getStub(): string {
@@ -18,6 +19,12 @@ export class MailMakeCommand extends GeneratorCommand {
     protected getSuffix(): string {
         return '';
     }
+
+    @args.string()
+    public name: string;
+
+    @flags.boolean({ description: 'Create the class even if the component already exists' })
+    public force: boolean;
 
     static commandName = 'make:mail';
 

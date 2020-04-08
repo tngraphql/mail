@@ -8,9 +8,13 @@
  * file that was distributed with this source code.
  */
 
-import { Application, LoadConfiguration } from '@tngraphql/illuminate';
+import { Application, ConsoleKernel, LoadConfiguration } from '@tngraphql/illuminate';
 import { MailServiceProvider } from '../src';
 import { MailManager } from '../src/Mail/MailManager';
+import { Filesystem } from '@poppinss/dev-utils/build';
+import { join } from "path";
+
+const fs = new Filesystem(join(__dirname, 'app'));
 
 describe('mail-service-provider', () => {
 
@@ -19,5 +23,16 @@ describe('mail-service-provider', () => {
         await (new LoadConfiguration().bootstrap(app));
         await app.register(new MailServiceProvider(app));
         expect(app['mail.manager']).toBeInstanceOf(MailManager);
+    });
+
+    it('should register command', async () => {
+        const app = new Application(fs.basePath);
+        app.environment = 'test';
+        await app.register(new MailServiceProvider(app));
+        const kernel = new ConsoleKernel(app);
+
+        await kernel.call('install:mail', []);
+        await kernel.call('make:mail', ['name']);
+        await fs.cleanup();
     });
 })
