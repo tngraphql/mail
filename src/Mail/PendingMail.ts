@@ -47,11 +47,11 @@ export class PendingMail {
         return this;
     }
 
-    public send(mailable: MailableContract) {
-        return this.mailer.send(this.fill(mailable));
+    public send<T = any>(mailable: MailableContract): Promise<T> {
+        return this.mailer.send<T>(this.fill(mailable));
     }
 
-    public fill(mailable: any) {
+    public fill(mailable: any): MailableContract {
         return mailable.to(this.$to)
             .cc(this.$cc)
             .bcc(this.$bcc)

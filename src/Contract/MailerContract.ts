@@ -7,13 +7,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+import {PendingMail} from "../Mail/PendingMail";
 
 export interface MailerContract {
     send<T = any>(view: any): Promise<T>;
 
-    to(users)
+    to(users): PendingMail
 
-    cc(users)
+    cc(users): PendingMail
 
-    bcc(users)
+    bcc(users): PendingMail
 }

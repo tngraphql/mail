@@ -20,28 +20,28 @@ export interface MailableContract {
      *
      * @return void
      */
-    send(mailer);
+    send<T = any>(mailer): Promise<T>;
 
     /**
      * Set the recipients of the message.
      *
      * @return this
      */
-    cc(address: AddressType, name?: string | null);
+    cc(address: AddressType, name?: string | null): this;
 
     /**
      * Set the recipients of the message.
      *
      * @return this
      */
-    bcc(address: AddressType, name?: string | null);
+    bcc(address: AddressType, name?: string | null): this;
 
     /**
      * Set the recipients of the message.
      *
      * @return this
      */
-    to(address: AddressType, name?: string | null);
+    to(address: AddressType, name?: string | null): this;
 
     /**
      * Set the name of the mailer that should be used to send the message.
