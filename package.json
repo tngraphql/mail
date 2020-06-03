@@ -1,6 +1,6 @@
 {
   "name": "@tngraphql/mail",
-  "version": "1.0.14-alpha",
+  "version": "1.0.15-alpha",
   "description": "Mail provider for tngraphql framework and has support for common mailing services to send emails",
   "main": "dist/src/index.js",
   "types": "./dist/src/index.d.ts",
