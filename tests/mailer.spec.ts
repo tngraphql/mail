@@ -269,6 +269,39 @@ describe('mailer', () => {
         expect(events[1].message.toJSON()).toEqual(messages[0]);
     });
 
+    it('send email settings build', async () => {
+        const messages = [];
+        const events = [];
+        const transport = {
+            send: (message) => {
+                messages.push(message);
+            }
+        }
+        const event = {
+            emit: (eventName, data) => {
+                events.push(data);
+            }
+        }
+        const mailer: any | Mailer = new Mailer(transport as any, event);
+
+        class Simple extends Mailable {
+            public build() {
+                this.from('simple@gmail.com');
+                this.to({ email: 'simplenew@gmail.com' })
+                    .bcc({ email: 'simplenew@gmail.com' })
+                    .text('simple text')
+            }
+        }
+
+        await mailer.send(new Simple());
+
+        const message = events[0].message.toJSON();
+        expect(message.from.address).toBe('simple@gmail.com')
+        expect(message.to[0].address).toBe('simplenew@gmail.com')
+        expect(message.bcc[0].address).toBe('simplenew@gmail.com')
+        expect(message.text).toBe('simple text')
+    });
+
     it('send email when set from address', async () => {
         const messages = [];
         const events = [];

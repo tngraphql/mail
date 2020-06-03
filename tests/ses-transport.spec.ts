@@ -10,7 +10,6 @@
 
 import { SesTransport } from '../src/Transport/SesTransport';
 import { Message } from '../src/Message';
-import { MemoryTransport } from '../src/Transport/MemoryTransport';
 require('dotenv').config();
 
 describe('ses-transport', () => {

@@ -22,6 +22,10 @@ export class Mailable implements MailableContract {
     constructor() {
     }
 
+    public build(): void {
+
+    }
+
     /**
      * Explicit content set on the message object. This will get
      * preference over views
@@ -225,12 +229,12 @@ export class Mailable implements MailableContract {
      */
     public send<T = any>(mailer: Mailer): Promise<T> {
         return mailer.send((message: Message) => {
-            this.buildFrom(message)
+            this.buildContent(message)
+                .buildFrom(message)
                 .buildRecipients(message)
                 .buildSubject(message)
                 .buildSubject(message)
                 .runCallbacks(message)
-                .buildContent(message)
                 .buildAttachments(message);
         });
     }

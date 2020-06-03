@@ -142,7 +142,6 @@ export class Mailer implements MailerContract {
         // sẽ được gửi tới địa chỉ duy nhất để kiểm tra
         if ( this._to && this._to.address ) {
             this.setGlobalToAndRemoveCcAndBcc(message);
-
         }
 
         await this.shouldSendMessage(message)

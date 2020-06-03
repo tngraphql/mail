@@ -596,10 +596,10 @@
     macroable "^4.0.2"
     snake-case "^3.0.3"
 
-"@tngraphql/illuminate@^1.1.3-2-alpha":
-  version "1.1.3-2-alpha"
-  resolved "https://registry.yarnpkg.com/@tngraphql/illuminate/-/illuminate-1.1.3-2-alpha.tgz#87fbb2540c8bda9524a1c23202900330a2907fe5"
-  integrity sha512-/OZZHWnp6h0EcEsKTxJfSdzinXkQvPkfLdV0lB5CqDuxPiIF58GwiH1GeE+uGaCT2e5W50Wl3BpyE9GxB/FXwg==
+"@tngraphql/illuminate@^1.1.7-4-alpha":
+  version "1.1.7-4-alpha"
+  resolved "https://registry.yarnpkg.com/@tngraphql/illuminate/-/illuminate-1.1.7-4-alpha.tgz#5aa2a4fad39646915f3841c2235a1823bdc98ea6"
+  integrity sha512-OzCplhOhUBWAMNytI1VQDL8EwDCxuETxwZ2TgMH9oPD7KTg4rNh21j7DqQkTkrX+52U0qwiPw5w/n3NGR4yVkA==
   dependencies:
     "@adonisjs/env" "^1.0.12"
     "@adonisjs/events" "^1.0.7"
