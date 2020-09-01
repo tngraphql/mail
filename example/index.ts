@@ -98,7 +98,17 @@ async function main() {
     });*/
 
     exp.get('/', (req, res) => {
-        res.send(view.render('order', { introLines: ['nguyen'] }));
+        var inlineCss = require('inline-css');
+        const html = view.render('order', {introLines: ['nguyen'], link: 'https://phantrungnguyen.com'})
+
+        inlineCss(view.render('order', { introLines: ['nguyen'], link: 'https://phantrungnguyen.com' }), {
+            url: 'http://localhost:3000'
+        })
+            .then(function(html) {
+                res.send(html);
+            });
+
+
     })
 
     exp.listen(3000, 'localhost', () => {

@@ -12,9 +12,12 @@ import { Application, LoadConfiguration } from '@tngraphql/illuminate';
 import { Mailable } from '../src/Mail/Mailable';
 import { config, createTestAccount } from './helpers';
 import { SmtpTransport } from '../src/Transport/SmtpTransport';
+import {Filesystem} from "@poppinss/dev-utils/build";
+import {join} from "path";
 
 const nodemailer = require('nodemailer');
 
+const fs = new Filesystem(join(__dirname, 'app'));
 describe('smtp-transport', () => {
     let account;
     let app;
@@ -58,6 +61,36 @@ describe('smtp-transport', () => {
 
         const info: any = await mail.to('recipient@example.com').send(new Simple());
         console.log('Preview URL: ', nodemailer.getTestMessageUrl(info));
+    });
+
+    it('send html mail', async () => {
+        app.config.set('mail', config(account, 'smtp'));
+        await fs.add('views/message.edge', `<h1>hello {{ user }}</h1>`);
+        app.singleton('view', () => {
+            const edge = require('edge.js')
+            edge.registerViews(join(fs.basePath, 'views'));
+            return {
+                render: async (template, data) => {
+                    return edge.render(template, data)
+                }
+            };
+        });
+
+        const mail = new MailManager(app);
+
+        class Simple extends Mailable {
+
+            constructor() {
+                super();
+                this.htmlView('message', {});
+                this.subject('plain email');
+            }
+        }
+
+        const info: any = await mail.to('recipient@example.com').send(new Simple());
+        console.log('Preview URL: ', nodemailer.getTestMessageUrl(info));
+
+        await fs.cleanup();
     });
 
     it('throw errors if unable to send email', async () => {

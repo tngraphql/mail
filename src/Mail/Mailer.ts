@@ -135,7 +135,7 @@ export class Mailer implements MailerContract {
 
         const callback: (message: any) => any = view as any;
 
-        callback && callback(message);
+        callback && await callback(message);
 
         // Nếu "to" được đặt mặc định. Chúng tôi sẽ đặt địa chỉ đó trên thư.
         // Điều này sẽ hữu ích trong quá trình phát triển, trong đó muỗi thư

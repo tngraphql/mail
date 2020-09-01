@@ -227,9 +227,9 @@ export class Mailable implements MailableContract {
      *
      * @param mailer
      */
-    public send<T = any>(mailer: Mailer): Promise<T> {
-        return mailer.send((message: Message) => {
-            this.buildContent(message)
+    public async send<T = any>(mailer: Mailer): Promise<T> {
+        return mailer.send(async (message: Message) => {
+            (await this.buildContent(message))
                 .buildFrom(message)
                 .buildRecipients(message)
                 .buildSubject(message)
@@ -244,20 +244,21 @@ export class Mailable implements MailableContract {
      *
      * @param message
      */
-    public buildContent(message: Message): this {
+    public async buildContent(message: Message): Promise<this> {
         if ( typeof this['build'] === 'function' ) {
             this['build']();
         }
 
         if ( this.content.html ) {
-            message.html(this.content.html);
+            message.html(await this.content.html);
         }
         if ( this.content.text ) {
-            message.text(this.content.text);
+            message.text(await this.content.text);
         }
         if ( this.content.watch ) {
-            message.watch(this.content.watch);
+            message.watch(await this.content.watch);
         }
+
         return this;
     }
 

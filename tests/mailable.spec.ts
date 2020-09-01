@@ -14,6 +14,7 @@ import * as path from 'path';
 import { join } from 'path';
 import { Filesystem } from '@poppinss/dev-utils/build';
 import { Application } from '@tngraphql/illuminate';
+import {Message} from "../src/Message";
 
 describe('mailable', () => {
 
@@ -306,6 +307,28 @@ describe('mailable', () => {
         afterEach(async () => {
             await fs.cleanup()
         })
+
+        it('Compute email html from defined view use async', async () => {
+            const app = new Application(fs.basePath);
+            app.singleton('view', () => {
+                const edge = require('edge.js')
+                edge.registerViews(path.join(fs.basePath, 'views'));
+                return {
+                    render: async (template, data) => {
+                        return edge.render(template, data)
+                    }
+                };
+            });
+
+            const mailable: any | Mailable = new Mailable();
+
+            mailable.htmlView('message', { user: 'nguyenpl' });
+
+            const message: any = new Message();
+            await mailable.buildContent(message);
+
+            expect(message.content.html).toBe('<h1>hello nguyenpl</h1>\n')
+        });
 
         it('Compute email html from defined view', async () => {
             const app = new Application(fs.basePath);
