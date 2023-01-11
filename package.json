@@ -38,7 +38,7 @@
     "express": "^4.17.1",
     "i18n": "^0.8.6",
     "jest": "^25.1.0",
-    "knex": "^0.20.13",
+    "knex": "^2.4.0",
     "mailgun-js": "^0.22.0",
     "mysql": "^2.18.1",
     "nodemailer-mailgun-transport": "^2.0.0",
